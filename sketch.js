@@ -1,3 +1,5 @@
+//niels is a nagger
+
 var resolution = [1920, 1080];
 var walls = [];
 var balls = [];
