@@ -61,8 +61,22 @@ function setup()
 function draw() 
 {
     background(255);
+    fill(128, 66, 36);
+    rect(resolution[0]/2 - 0.42*resolution[0], resolution[1]/2 - 0.22*resolution[0], 0.84*resolution[0], 0.44*resolution[0]);
+
+    fill(0);
+    //Corners
+    circle(resolution[0]/2 - 0.4*resolution[0], resolution[1]/2 - 0.2*resolution[0], 0.04 * resolution[0]);
+    circle(resolution[0]/2 - 0.4*resolution[0], resolution[1]/2 + 0.2*resolution[0], 0.04 * resolution[0]);
+    circle(resolution[0]/2 + 0.4*resolution[0], resolution[1]/2 - 0.2*resolution[0], 0.04 * resolution[0]);
+    circle(resolution[0]/2 + 0.4*resolution[0], resolution[1]/2 + 0.2*resolution[0], 0.04 * resolution[0]);
+    
+    //Middle edges
+    circle(resolution[0]/2, resolution[1]/2 - 0.2*resolution[0], 0.04 * resolution[0]);
+    circle(resolution[0]/2, resolution[1]/2 +  .2*resolution[0], 0.04 * resolution[0]);
+
     fill(44, 130, 87);
-    rect(resolution[0]/2 -  0.4*resolution[0], resolution[1]/2 -  0.2*resolution[0], 0.8*resolution[0], 0.4*resolution[0]);
+    rect(resolution[0]/2 - 0.4*resolution[0], resolution[1]/2 - 0.2*resolution[0], 0.8*resolution[0], 0.4*resolution[0]);
     
     //Ball rendering
     for (b of balls)
