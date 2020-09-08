@@ -1,7 +1,6 @@
-//niels is a nagger
-
 let e = 0.93
 let mu  = 0.005
+let mBall = 0.17
 
 var resolution = [1920, 1080];
 var walls = [];
@@ -33,6 +32,8 @@ let Ycenterline;
 
 function setup() 
 {
+    frameRate(60);
+    frameTime = 1/60;
     ballYellow = color(250, 181, 41);
     ballBlue = color(27, 72, 201);
     ballRed = color(222, 42, 27);
@@ -52,6 +53,9 @@ function setup()
     balls.push(new Ball("white", 0.25, 0.25, ballWhite, 0));
     resolution = [windowWidth, windowHeight];
     createCanvas(resolution[0], resolution[1]);
+    print(balls[-1])
+    balls[balls.length-1].vx = 0.4;
+    balls[balls.length-1].isMoving = true;
 }
   
 function draw() 
@@ -62,7 +66,27 @@ function draw()
     
     //Ball rendering
     for (b of balls)
-    { 
+    {   
+        b.x += b.vx * frameTime;
+        b.y += b.vy * frameTime;
+        if (b.isMoving){
+            b.isMoving = false;
+            if(b.vx !== 0){
+                b.isMoving = true;
+                b.vx += 9.81*mu*frameTime * -(b.vx/Math.abs(b.vx));
+                console.log(b.vx)
+                if (Math.abs(b.vx) <= 0.001){
+                    b.vx = 0;
+                }
+            }
+            if(b.vy !== 0){
+                b.isMoving = true;
+                b.vy += 9.81*mu*frameTime * -(b.vy/Math.abs(b.vy));
+                if (Math.abs(b.vy) <= 0.001){
+                        b.vy = 0;
+                    }
+            }
+        }
         fill(b.color);
         circle(convertX(b.x), convertY(b.y), ballDiameter*0.8*resolution[0]);
     }
@@ -123,5 +147,22 @@ function convertY(y){
     return resolution[1]/2 -  0.2*resolution[0] + y*0.8*resolution[0]
 }
 
+function ballCollision(b1, b2){
+    theta1 = Math.atan(b1.vy/b1.vx)
+    theta2 = Math.atan(b1.vy/b1.vx)
+    phi = Math.atan((b1.y - b2.y) / (b1.x - b2.x))
+
+    vx1 = b2.vx*Math.cos(theta2-phi)*Math.cos(phi) + b1.vx*Math.sin(theta1 - phi)*Math.cos(phi+Math.PI/2)
+    vy1 = b2.vy*Math.cos(theta2-phi)*Math.sin(phi) + b1.vy*Math.sin(theta1 - phi)*Math.sin(phi+Math.PI/2)
+
+    vx2 = b1.vx*Math.cos(theta1-phi)*Math.cos(phi) + b2.vx*Math.sin(theta2 - phi)*Math.cos(phi+Math.PI/2)
+    vy2 = b1.vy*Math.cos(theta1-phi)*Math.sin(phi) + b2.vy*Math.sin(theta2 - phi)*Math.sin(phi+Math.PI/2)
+
+    b1.vx = vx1
+    b1.vy = vy1
+    b2.vx = vx2
+    b2.vy = vy2
+
+}
 //team true --> striped
 //lokaal coordinaten systeem origin in top left corner van tafel, lengte = 1 uts, hoogte = 0.5 uts
